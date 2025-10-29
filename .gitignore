@@ -20,6 +20,16 @@ override.tf.json
 *_override.tf
 *_override.tf.json
 
+# SSH Keys (IMPORTANT: Never commit private keys!)
+k8s
+k8s.pub
+*.pem
+*.key
+
+# Ansible
+*.retry
+join-command.sh
+
 # IDE
 .vscode/
 .idea/
