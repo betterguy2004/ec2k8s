@@ -105,14 +105,36 @@ echo "-------------Exporting Kubeconfig-------------"
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
 echo "-------------Waiting for API server to be ready-------------"
-until kubectl get nodes &> /dev/null; do
-  echo "Waiting for Kubernetes API server..."
+ATTEMPTS=0
+MAX_ATTEMPTS=60
+until kubectl get --raw='/readyz?verbose' &> /dev/null; do
+  ATTEMPTS=$((ATTEMPTS + 1))
+  if [ $ATTEMPTS -ge $MAX_ATTEMPTS ]; then
+    echo "API server failed to become ready after $MAX_ATTEMPTS attempts"
+    exit 1
+  fi
+  echo "Waiting for Kubernetes API server... (attempt $ATTEMPTS/$MAX_ATTEMPTS)"
   sleep 10
 done
 echo "API server is ready!"
 
+# Wait additional time for all control plane components
+echo "-------------Waiting for control plane components-------------"
+sleep 20
+
 echo "-------------Deploying Weavenet Pod Networking-------------"
-kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
+DEPLOY_ATTEMPTS=0
+MAX_DEPLOY_ATTEMPTS=5
+until kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml; do
+  DEPLOY_ATTEMPTS=$((DEPLOY_ATTEMPTS + 1))
+  if [ $DEPLOY_ATTEMPTS -ge $MAX_DEPLOY_ATTEMPTS ]; then
+    echo "Failed to deploy Weave network after $MAX_DEPLOY_ATTEMPTS attempts"
+    exit 1
+  fi
+  echo "Retrying Weave deployment... (attempt $DEPLOY_ATTEMPTS/$MAX_DEPLOY_ATTEMPTS)"
+  sleep 15
+done
+echo "Weave network deployed successfully!"
 
 echo "-------------Creating file with join command-------------"
 echo `kubeadm token create --print-join-command` > ./join-command.sh
