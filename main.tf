@@ -1,6 +1,6 @@
 # Launch master node
 resource "aws_instance" "k8s_master" {
-  ami                    = local.ami["master"]
+  ami           = var.ami["master"]
   instance_type          = var.instance_type["master"]
   subnet_id              = aws_subnet.k8s_public_subnet.id
   vpc_security_group_ids = [aws_security_group.k8s_master.id]
@@ -34,7 +34,7 @@ resource "aws_instance" "k8s_master" {
 # Launch worker nodes
 resource "aws_instance" "k8s_worker" {
   count                  = var.worker_instance_count
-  ami                    = local.ami["worker"]
+  ami           = var.ami["worker"]
   instance_type          = var.instance_type["worker"]
   subnet_id              = aws_subnet.k8s_public_subnet.id
   vpc_security_group_ids = [aws_security_group.k8s_worker.id]
