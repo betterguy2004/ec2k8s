@@ -1,5 +1,13 @@
 # Kubernetes v1.28 on AWS using Kubeadm and Terraform
+### Clone the source
+```bash
+https://github.com/betterguy2004/ec2k8s
+```
 
+### Change permission of .pem
+```bash
+chmod 600 k8s
+```
 ## Installing tools
 
 ### Installing Terraform
