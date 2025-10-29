@@ -2,39 +2,61 @@
 
 ## Installing tools
 
-### Installing Terraformm
-```
-sudo yum install -y yum-utils
-sudo yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo
-sudo yum -y install terraform
+### Installing Terraform
+```bash
+sudo snap install terraform --classic
+terraform --version
 ```
 ### Installing Ansible
-```
+```bash
+sudo apt install python3-pip -y
 pip3 install ansible
-```
-```
-$ sudo su
-# whereis ansible
-ansible: /usr/local/bin/ansible
-```
-Updating path
-```
-echo "export PATH=$PATH:/usr/local/bin/" >> ~/.bashrc
+
+# Thêm vào PATH nếu cần
+echo 'export PATH=$PATH:~/.local/bin' >> ~/.bashrc
 source ~/.bashrc
+
+# Kiểm tra Ansible
+ansible --version
 ```
-```
-# ansible --version
-# ansible-playbook --version
-```
-### Installing Git
-```
-yum install git -y
+### Installing AWS CLI
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip -y
+unzip awscliv2.zip
+sudo ./aws/install
+rm -rf aws awscliv2.zip
+
+# Kiểm tra AWS CLI
+aws --version
 ```
 
 ## Configure AWS CLI
 ### Create IAM user and add credentials
-```
+```bash
 aws configure
+```
+
+## Running Terraform
+
+### Initialize Terraform
+```bash
+terraform init
+```
+
+### Preview changes
+```bash
+terraform plan
+```
+
+### Deploy infrastructure
+```bash
+terraform apply
+```
+
+### Destroy infrastructure
+```bash
+terraform destroy
 ```
 
 ## References

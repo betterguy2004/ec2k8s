@@ -96,6 +96,11 @@ mkdir -p /root/.kube
 cp -iv /etc/kubernetes/admin.conf /root/.kube/config
 sudo chown $(id -u):$(id -g) /root/.kube/config
 
+# Copy kubeconfig for ubuntu user
+mkdir -p /home/ubuntu/.kube
+cp -iv /etc/kubernetes/admin.conf /home/ubuntu/.kube/config
+chown -R ubuntu:ubuntu /home/ubuntu/.kube
+
 echo "-------------Exporting Kubeconfig-------------"
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
