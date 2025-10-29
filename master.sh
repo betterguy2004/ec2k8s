@@ -104,6 +104,13 @@ chown -R ubuntu:ubuntu /home/ubuntu/.kube
 echo "-------------Exporting Kubeconfig-------------"
 export KUBECONFIG=/etc/kubernetes/admin.conf
 
+echo "-------------Waiting for API server to be ready-------------"
+until kubectl get nodes &> /dev/null; do
+  echo "Waiting for Kubernetes API server..."
+  sleep 10
+done
+echo "API server is ready!"
+
 echo "-------------Deploying Weavenet Pod Networking-------------"
 kubectl apply -f https://github.com/weaveworks/weave/releases/download/v2.8.1/weave-daemonset-k8s.yaml
 
