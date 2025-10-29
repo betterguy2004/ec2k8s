@@ -1,12 +1,14 @@
 # Launch master node
 resource "aws_instance" "k8s_master" {
-  ami           = var.ami["master"]
-  instance_type = var.instance_type["master"]
+  ami                    = local.ami["master"]
+  instance_type          = var.instance_type["master"]
+  subnet_id              = aws_subnet.k8s_public_subnet.id
+  vpc_security_group_ids = [aws_security_group.k8s_master.id]
+  key_name               = aws_key_pair.k8s.key_name
+
   tags = {
     Name = "k8s-master"
   }
-  key_name        = aws_key_pair.k8s.key_name
-  security_groups = ["k8s_master_sg"]
 
   connection {
     type        = "ssh"
@@ -31,15 +33,17 @@ resource "aws_instance" "k8s_master" {
 
 # Launch worker nodes
 resource "aws_instance" "k8s_worker" {
-  count         = var.worker_instance_count
-  ami           = var.ami["worker"]
-  instance_type = var.instance_type["worker"]
+  count                  = var.worker_instance_count
+  ami                    = local.ami["worker"]
+  instance_type          = var.instance_type["worker"]
+  subnet_id              = aws_subnet.k8s_public_subnet.id
+  vpc_security_group_ids = [aws_security_group.k8s_worker.id]
+  key_name               = aws_key_pair.k8s.key_name
+  depends_on             = [aws_instance.k8s_master]
+
   tags = {
     Name = "k8s-worker-${count.index}"
   }
-  key_name        = aws_key_pair.k8s.key_name
-  security_groups = ["k8s_worker_sg"]
-  depends_on      = [aws_instance.k8s_master]
   connection {
     type        = "ssh"
     user        = "ubuntu"

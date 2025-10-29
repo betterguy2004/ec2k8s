@@ -5,8 +5,8 @@ variable "region" {
 variable "ami" {
   type = map(string)
   default = {
-    master = "ami-01361d3186814b895"
-    worker = "ami-01361d3186814b895"
+    master = "ami-0a2fc2446ff3412c3"
+    worker = "ami-0a2fc2446ff3412c3"
   }
 }
 

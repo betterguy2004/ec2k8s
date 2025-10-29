@@ -1,6 +1,7 @@
 resource "aws_security_group" "k8s_master" {
   name        = "k8s_master_sg"
   description = "k8s_master Security Group"
+  vpc_id      = aws_vpc.k8s_vpc.id
 
   ingress {
     description      = "SSH"
@@ -81,6 +82,7 @@ resource "aws_security_group" "k8s_master" {
 resource "aws_security_group" "k8s_worker" {
   name        = "k8s_worker_sg"
   description = "k8s_worker Security Group"
+  vpc_id      = aws_vpc.k8s_vpc.id
 
   ingress {
     description      = "SSH"
