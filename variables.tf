@@ -1,12 +1,12 @@
 variable "region" {
-  default = "us-east-1"
+  default = "ap-southeast-1"
 }
 
 variable "ami" {
   type = map(string)
   default = {
-    master = "ami-0261755bbcb8c4a84"
-    worker = "ami-0261755bbcb8c4a84"
+    master = "ami-01361d3186814b895"
+    worker = "ami-01361d3186814b895"
   }
 }
 
@@ -14,7 +14,7 @@ variable "instance_type" {
   type = map(string)
   default = {
     master = "t2.medium"
-    worker = "t2.micro"
+    worker = "t2.medium"
   }
 }
 
